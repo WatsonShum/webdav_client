@@ -61,22 +61,24 @@ class Client {
   // }
 
   /// Read all files in a folder
-  Future<List<File>> readDir(String path, [CancelToken? cancelToken]) async {
+  Future<List<File>> readDir(String path, String depth,
+      [CancelToken? cancelToken]) async {
     path = fixSlashes(path);
     var resp = await this
         .c
-        .wdPropfind(this, path, true, fileXmlStr, cancelToken: cancelToken);
+        .wdPropfind(this, path, depth, fileXmlStr, cancelToken: cancelToken);
 
     String str = resp.data;
     return WebdavXml.toFiles(path, str);
   }
 
   /// Read a single files properties
-  Future<File> readProps(String path, [CancelToken? cancelToken]) async {
+  Future<File> readProps(String path, String depth,
+      [CancelToken? cancelToken]) async {
     path = fixSlashes(path);
     var resp = await this
         .c
-        .wdPropfind(this, path, true, fileXmlStr, cancelToken: cancelToken);
+        .wdPropfind(this, path, depth, fileXmlStr, cancelToken: cancelToken);
 
     String str = resp.data;
     return WebdavXml.toFiles(path, str, skipSelf: false).first;
